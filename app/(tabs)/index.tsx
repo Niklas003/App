@@ -1,3 +1,4 @@
+import { fetchFlightplan } from "@/api/fetchFlightPlan";
 import { HelloWave } from "@/components/HelloWave";
 import { AirportSearch } from "@/components/Home/AirportSearch";
 import { CurrentFlight } from "@/components/Home/CurrentFlight";
@@ -6,28 +7,47 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { corporateColor, corporateLightWhite } from "@/constants/Colors";
+import { FlightPlanFormat } from "@/constants/Remote";
+import { getUTCTimeString } from "@/helper/getUTCTimeString";
 import BasicFlight from "@/types/BasicFlight";
 import { BlurView } from "expo-blur";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Platform, StyleSheet } from "react-native";
 
 export default function HomeScreen() {
   const [isInputFocus, setIsInputFocus] = useState<boolean>(false);
-  const mockCurrentFlight: BasicFlight = {
-    origin: "EDDB",
-    destination: "HUEN",
-    departUTC: "1205Z",
-    arrivalUTC: "2006Z",
-    aircraft: "A39N",
-    callsign: "EGB5NK"
-  }
+  const [recentFlightplan, setRecentFlightplan] = useState<any>(null);
+  const [currentFlight, setCurrentFlight] = useState<BasicFlight | undefined>();
+
+  useEffect(() => {
+    fetchFlightplan("720073", FlightPlanFormat.JSON).then((res) => {
+      setRecentFlightplan(res);
+    });
+  }, []);
+
+  useEffect(() => {
+    setCurrentFlight({
+      origin: recentFlightplan?.origin.icao_code,
+      destination: recentFlightplan?.destination.icao_code,
+      departUTC: getUTCTimeString(recentFlightplan?.times.est_out),
+      arrivalUTC: getUTCTimeString(recentFlightplan?.times.est_in),
+      aircraft: recentFlightplan?.aircraft.icao_code,
+      callsign: recentFlightplan?.atc.callsign,
+    });
+  }, [recentFlightplan]);
+
   return (
-    <ParallaxScrollView headerBackgroundColor={{ light: corporateLightWhite, dark: corporateColor }} headerImage={<HomeHeader />}>
+    <ParallaxScrollView
+      headerBackgroundColor={{ light: corporateLightWhite, dark: corporateColor }}
+      headerImage={<HomeHeader />}
+    >
       <AirportSearch isFocus={(focus) => setIsInputFocus(focus)} />
       {isInputFocus && <BlurView intensity={2000} tint="default" style={styles.inputBlurOverlay} />}
       <ThemedView style={styles.currentFlight}>
-        <ThemedText type="lightSubtitle" style={styles.currentFlightTitle}>Aktueller Flug</ThemedText>
-        <CurrentFlight flight={mockCurrentFlight} />
+        <ThemedText type="lightSubtitle" style={styles.currentFlightTitle}>
+          Aktueller Flug
+        </ThemedText>
+        <CurrentFlight flight={currentFlight} />
       </ThemedView>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome!</ThemedText>
@@ -43,8 +63,7 @@ export default function HomeScreen() {
               android: "cmd + m",
               web: "F12",
             })}
-          </ThemedText>{" "}
-          to open developer tools.
+          </ThemedText>
         </ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
@@ -86,7 +105,7 @@ const styles = StyleSheet.create({
   currentFlight: {
     marginTop: -30,
   },
-  currentFlightTitle:{
+  currentFlightTitle: {
     marginBottom: 16,
-  }
+  },
 });
