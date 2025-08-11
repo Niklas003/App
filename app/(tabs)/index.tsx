@@ -10,13 +10,14 @@ import { corporateColor, corporateLightWhite } from "@/constants/Colors";
 import { FlightPlanFormat } from "@/constants/Remote";
 import { getUTCTimeString } from "@/helper/getUTCTimeString";
 import BasicFlight from "@/types/BasicFlight";
+import { SimBriefFlightPlan } from "@/types/FlightPlan";
 import { BlurView } from "expo-blur";
 import { useEffect, useState } from "react";
 import { Platform, StyleSheet } from "react-native";
 
 export default function HomeScreen() {
   const [isInputFocus, setIsInputFocus] = useState<boolean>(false);
-  const [recentFlightplan, setRecentFlightplan] = useState<any>(null);
+  const [recentFlightplan, setRecentFlightplan] = useState<SimBriefFlightPlan | null>(null);
   const [currentFlight, setCurrentFlight] = useState<BasicFlight | undefined>();
 
   useEffect(() => {
@@ -26,14 +27,16 @@ export default function HomeScreen() {
   }, []);
 
   useEffect(() => {
-    setCurrentFlight({
-      origin: recentFlightplan?.origin.icao_code,
-      destination: recentFlightplan?.destination.icao_code,
-      departUTC: getUTCTimeString(recentFlightplan?.times.est_out),
-      arrivalUTC: getUTCTimeString(recentFlightplan?.times.est_in),
-      aircraft: recentFlightplan?.aircraft.icao_code,
-      callsign: recentFlightplan?.atc.callsign,
-    });
+    if (recentFlightplan) {
+      setCurrentFlight({
+        origin: recentFlightplan?.origin.icao_code,
+        destination: recentFlightplan?.destination.icao_code,
+        departUTC: getUTCTimeString(recentFlightplan?.times.est_out),
+        arrivalUTC: getUTCTimeString(recentFlightplan?.times.est_in),
+        aircraft: recentFlightplan?.aircraft.icao_code,
+        callsign: recentFlightplan?.atc.callsign,
+      });
+    }
   }, [recentFlightplan]);
 
   return (

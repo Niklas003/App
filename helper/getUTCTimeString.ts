@@ -1,9 +1,13 @@
-export const getUTCTimeString = (unixTime: number) => {
+export const getUTCTimeString = (unixTime: string) => {
     if(unixTime){
-    const dateTime = new Date(unixTime*1000)
+    try{
+    const dateTime = new Date(Number(unixTime)*1000)
     const hours = dateTime.getUTCHours()
     const minutes = dateTime.getUTCMinutes()
     return `${hours}${minutes}Z`;
+}catch{
+    return ''
+}
 }else{
     return ''
 }
