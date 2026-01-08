@@ -18,23 +18,37 @@ import { Platform, StyleSheet } from "react-native";
 export default function HomeScreen() {
   const [isInputFocus, setIsInputFocus] = useState<boolean>(false);
   const [recentFlightplan, setRecentFlightplan] = useState<SimBriefFlightPlan | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [currentFlight, setCurrentFlight] = useState<BasicFlight | undefined>();
 
   useEffect(() => {
-    fetchFlightplan("720073", FlightPlanFormat.JSON).then((res) => {
-      setRecentFlightplan(res);
-    });
+    try {
+      fetchFlightplan("720073", FlightPlanFormat.JSON).then((res) => {
+        if (!res || (res as any).error) {
+          setError('Fehler beim Laden des Flugplans.');
+          return;
+        }
+        // SimBrief's parsed JSON uses `fetch.status === 'Success'` (not HTTP status code)
+        if (res.fetch?.status === "Success" || res.origin) {
+          setRecentFlightplan(res as SimBriefFlightPlan);
+          return;
+        }
+        setError('Fehler beim Laden des Flugplans.');
+      });
+    } catch (e) {
+      setError('Fehler beim Laden des Flugplans.');
+    }
   }, []);
 
   useEffect(() => {
     if (recentFlightplan) {
       setCurrentFlight({
-        origin: recentFlightplan?.origin.icao_code,
-        destination: recentFlightplan?.destination.icao_code,
+        origin: recentFlightplan?.origin.icao_code ?? "",
+        destination: recentFlightplan?.destination.icao_code ?? "",
         departUTC: getUTCTimeString(recentFlightplan?.times.est_out),
         arrivalUTC: getUTCTimeString(recentFlightplan?.times.est_in),
-        aircraft: recentFlightplan?.aircraft.icao_code,
-        callsign: recentFlightplan?.atc.callsign,
+        aircraft: recentFlightplan?.aircraft.icao_code ?? "",
+        callsign: recentFlightplan?.atc.callsign ?? "",
       });
     }
   }, [recentFlightplan]);
@@ -50,7 +64,7 @@ export default function HomeScreen() {
         <ThemedText type="lightSubtitle" style={styles.currentFlightTitle}>
           Aktueller Flug
         </ThemedText>
-        <CurrentFlight flight={currentFlight} />
+        <CurrentFlight flight={currentFlight} error={error} />
       </ThemedView>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome!</ThemedText>

@@ -5,7 +5,7 @@ import { ThemedCardView } from "../ThemedCardView";
 import { ThemedText } from "../ThemedText";
 import { FlightProgress } from "../ui/FlightProgress";
 
-export function CurrentFlight({flight}:{flight: BasicFlight | undefined}) {
+export function CurrentFlight({flight, error}:{flight: BasicFlight | undefined, error: string | null}) {
   const currentScheme = useColorScheme();
   
   return (
@@ -22,6 +22,7 @@ export function CurrentFlight({flight}:{flight: BasicFlight | undefined}) {
           <ThemedText>{flight.arrivalUTC}</ThemedText>
         </View>
       </TouchableOpacity>):(
+        error ? <ThemedText>{error}</ThemedText> :
         <ThemedText>Loading</ThemedText>
       )}
     </ThemedCardView>
