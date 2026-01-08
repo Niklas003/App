@@ -15,6 +15,7 @@ import { BlurView } from "expo-blur";
 import { useEffect, useState } from "react";
 import { Platform, StyleSheet } from "react-native";
 
+
 export default function HomeScreen() {
   const [isInputFocus, setIsInputFocus] = useState<boolean>(false);
   const [recentFlightplan, setRecentFlightplan] = useState<SimBriefFlightPlan | null>(null);
@@ -60,12 +61,14 @@ export default function HomeScreen() {
     >
       <AirportSearch isFocus={(focus) => setIsInputFocus(focus)} />
       {isInputFocus && <BlurView intensity={2000} tint="default" style={styles.inputBlurOverlay} />}
+  
       <ThemedView style={styles.currentFlight}>
         <ThemedText type="lightSubtitle" style={styles.currentFlightTitle}>
           Aktueller Flug
         </ThemedText>
         <CurrentFlight flight={currentFlight} error={error} />
       </ThemedView>
+      
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome!</ThemedText>
         <HelloWave />

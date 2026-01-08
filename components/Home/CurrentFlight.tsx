@@ -1,5 +1,6 @@
 import { useColorScheme } from "@/hooks/useColorScheme.web";
 import BasicFlight from "@/types/BasicFlight";
+import * as Haptics from 'expo-haptics';
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ThemedCardView } from "../ThemedCardView";
 import { ThemedText } from "../ThemedText";
@@ -11,7 +12,10 @@ export function CurrentFlight({flight, error}:{flight: BasicFlight | undefined, 
   return (
     <ThemedCardView style={styles.card}>
       {flight?.origin ? (
-      <TouchableOpacity style={styles.flex}>
+      <TouchableOpacity style={styles.flex} onPress={() =>
+              Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Warning
+              )}>
         <View>
           <ThemedText type="defaultBold">{flight.origin}</ThemedText>
           <ThemedText>{flight.departUTC}</ThemedText>

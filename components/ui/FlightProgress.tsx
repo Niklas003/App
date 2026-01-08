@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   plane:{
     position: 'absolute',
-    bottom: 34,
+    bottom: 35,
     right: Dimensions.get('window').width/4 -12,
   }
 });
