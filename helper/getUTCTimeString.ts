@@ -4,7 +4,7 @@ export const getUTCTimeString = (unixTime: string) => {
     const dateTime = new Date(Number(unixTime)*1000)
     const hours = dateTime.getUTCHours()
     const minutes = dateTime.getUTCMinutes()
-    return `${hours}${minutes}Z`;
+    return `${hours < 10 ? '0' : ''}${hours}${minutes < 10 ? '0' : ''}${minutes}Z`;
 }catch{
     return ''
 }

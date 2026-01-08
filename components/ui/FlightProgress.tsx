@@ -1,6 +1,6 @@
 import { corporateColor, corporateYellow } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
-import { ColorSchemeName, StyleSheet, View } from "react-native";
+import { ColorSchemeName, Dimensions, StyleSheet, View } from "react-native";
 
 export function FlightProgress({ scheme }: { scheme: ColorSchemeName }) {
   return (
@@ -51,8 +51,8 @@ const styles = StyleSheet.create({
     backgroundColor: corporateColor,
   },
   plane:{
-    position: 'relative',
-    bottom: 12,
-    right: 100  //keep betweeen 174 and 31 based on flight progress
+    position: 'absolute',
+    bottom: 34,
+    right: Dimensions.get('window').width/4 -12,
   }
 });

@@ -20,7 +20,7 @@ export function HomeHeader() {
 const styles = StyleSheet.create({
   reactLogo: {
     height: 250,
-    width: 400,
+    width: Dimensions.get('window').width,
     bottom: 0,
     left: 0,
     position: 'absolute',
