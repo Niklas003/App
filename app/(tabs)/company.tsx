@@ -3,6 +3,7 @@ import { Platform, StyleSheet } from 'react-native';
 
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
+import { ParallaxHeader } from '@/components/ParallaxHeader';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -14,7 +15,9 @@ export default function TabTwoScreen() {
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={
-        <MaterialCommunityIcons name="airplane-takeoff" size={310} style={styles.headerImage} />
+        <ParallaxHeader title="Company">
+          <MaterialCommunityIcons name="airplane-takeoff" size={230} color={corporateYellow} />
+        </ParallaxHeader>
       }>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Company</ThemedText>

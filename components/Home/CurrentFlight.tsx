@@ -1,31 +1,33 @@
+import { Colors, corporateColor, corporateLightWhite } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme.web";
 import BasicFlight from "@/types/BasicFlight";
+import { Button } from "@react-navigation/elements";
 import * as Haptics from 'expo-haptics';
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ThemedCardView } from "../ThemedCardView";
 import { ThemedText } from "../ThemedText";
 import { FlightProgress } from "../ui/FlightProgress";
 
-export function CurrentFlight({flight, error}:{flight: BasicFlight | undefined, error: string | null}) {
+export function CurrentFlight({flight, error, refreshFlightPlan}:{flight: BasicFlight | undefined, error: string | null, refreshFlightPlan: () => void}) {
   const currentScheme = useColorScheme();
   
   return (
     <ThemedCardView style={styles.card}>
       {flight?.origin ? (
-      <TouchableOpacity style={styles.flex} onPress={() =>
-              Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Warning
-              )}>
-        <View>
-          <ThemedText type="defaultBold">{flight.origin}</ThemedText>
-          <ThemedText>{flight.departUTC}</ThemedText>
-        </View>
-        <FlightProgress scheme={currentScheme} />
-        <View>
-          <ThemedText type="defaultBold">{flight.destination}</ThemedText>
-          <ThemedText>{flight.arrivalUTC}</ThemedText>
-        </View>
-      </TouchableOpacity>):(
+      <><TouchableOpacity style={styles.flex} onPress={() => Haptics.notificationAsync(
+          Haptics.NotificationFeedbackType.Warning
+        )}>
+          <View>
+            <ThemedText type="defaultBold">{flight.origin}</ThemedText>
+            <ThemedText>{flight.departUTC}</ThemedText>
+          </View>
+          <FlightProgress scheme={currentScheme} />
+          <View>
+            <ThemedText type="defaultBold">{flight.destination}</ThemedText>
+            <ThemedText>{flight.arrivalUTC}</ThemedText>
+          </View>
+        </TouchableOpacity><Button onPressIn={() => refreshFlightPlan()} style={currentScheme === "dark" ? styles.refreshButton : styles.refreshButtonLight} color={currentScheme === "dark" ? corporateColor : corporateLightWhite}>Refresh</Button></>  
+    ):(
         error ? <ThemedText>{error}</ThemedText> :
         <ThemedText>Loading</ThemedText>
       )}
@@ -45,4 +47,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  refreshButton: {
+    marginTop: 20,
+    borderRadius: 5,
+    backgroundColor: Colors.light.background,
+  },
+  refreshButtonLight: {
+    marginTop: 20,
+    borderRadius: 5,
+    backgroundColor: Colors.dark.background,
+  }
 });

@@ -8,6 +8,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { corporateColor, corporateLightWhite } from "@/constants/Colors";
 import { FlightPlanFormat } from "@/constants/Remote";
+import { checkKeyExistsInAsyncStorage, getFromAsyncStorage, storeInAsycncStorage } from "@/helper/asyncStorageHelper";
 import { getUTCTimeString } from "@/helper/getUTCTimeString";
 import BasicFlight from "@/types/BasicFlight";
 import { SimBriefFlightPlan } from "@/types/FlightPlan";
@@ -21,9 +22,10 @@ export default function HomeScreen() {
   const [recentFlightplan, setRecentFlightplan] = useState<SimBriefFlightPlan | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [currentFlight, setCurrentFlight] = useState<BasicFlight | undefined>();
+  const flightPlanStorageKey = "recentFlightplan";
 
-  useEffect(() => {
-    try {
+  const fetchNewFlightplan = () => {
+        try {
       fetchFlightplan("720073", FlightPlanFormat.JSON).then((res) => {
         if (!res || (res as any).error) {
           setError('Fehler beim Laden des Flugplans.');
@@ -39,10 +41,25 @@ export default function HomeScreen() {
     } catch (e) {
       setError('Fehler beim Laden des Flugplans.');
     }
+  }
+
+  // Load recent flightplan from AsyncStorage on mount
+  useEffect(() => {
+    if(!recentFlightplan && !checkKeyExistsInAsyncStorage(flightPlanStorageKey)) {
+      fetchNewFlightplan();
+    }
+    else if (!recentFlightplan) {
+      getFromAsyncStorage(flightPlanStorageKey).then((res) => {
+        if (res) {
+          const parsed: SimBriefFlightPlan = JSON.parse(res);
+          setRecentFlightplan(parsed);
+        }});
+    }
   }, []);
 
   useEffect(() => {
     if (recentFlightplan) {
+      storeInAsycncStorage("recentFlightplan", JSON.stringify(recentFlightplan));
       setCurrentFlight({
         origin: recentFlightplan?.origin.icao_code ?? "",
         destination: recentFlightplan?.destination.icao_code ?? "",
@@ -66,7 +83,7 @@ export default function HomeScreen() {
         <ThemedText type="lightSubtitle" style={styles.currentFlightTitle}>
           Aktueller Flug
         </ThemedText>
-        <CurrentFlight flight={currentFlight} error={error} />
+        <CurrentFlight flight={currentFlight} error={error} refreshFlightPlan={() => fetchNewFlightplan()} />
       </ThemedView>
       
       <ThemedView style={styles.titleContainer}>

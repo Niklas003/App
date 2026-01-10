@@ -3,18 +3,19 @@ import { Platform, StyleSheet } from 'react-native';
 
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
+import { ParallaxHeader } from '@/components/ParallaxHeader';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { corporateYellow } from '@/constants/Colors';
-import { Octicons } from '@expo/vector-icons';
 
 export default function TabTwoScreen() {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={
-        <Octicons name="gear" size={310} style={styles.headerImage} />
+        <ParallaxHeader title="Settings">
+        </ParallaxHeader>
       }>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">App Settings</ThemedText>
