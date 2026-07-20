@@ -7,10 +7,12 @@ const tintColorDark = '#fff';
 export const corporateYellow = '#E39600'
 export const corporateColor = '#29323C'
 export const corporateLightWhite = '#F4F4F6'
+export const errorColor = '#e30000'
 
 export const Colors = {
   light: {
     text: corporateColor,
+    errorText: errorColor,
     background: corporateLightWhite,
     cardColor: '#FFFFFF',
     tint: tintColorLight,
@@ -21,6 +23,7 @@ export const Colors = {
   },
   dark: {
     text: corporateLightWhite,
+    errorText: errorColor,
     background: '#232930ff',
     cardColor: '#151718',
     tint: tintColorDark,
