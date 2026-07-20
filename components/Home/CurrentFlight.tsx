@@ -11,10 +11,9 @@ import { FlightProgress } from "../ui/FlightProgress";
 
 export function CurrentFlight({flight, error, refreshFlightPlan}:{flight: BasicFlight | undefined, error: string | null, refreshFlightPlan: () => void}) {
   const currentScheme = useColorScheme();
-  
   return (
     <ThemedCardView style={styles.card}>
-      {flight?.origin ? (
+      {flight ? (
       <><TouchableOpacity style={styles.flex} onPress={() => Haptics.notificationAsync(
           Haptics.NotificationFeedbackType.Warning
         )}>

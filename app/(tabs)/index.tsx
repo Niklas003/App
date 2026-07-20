@@ -58,7 +58,7 @@ export default function HomeScreen() {
   }, []);
 
   useEffect(() => {
-    if (recentFlightplan) {
+    if (recentFlightplan && recentFlightplan.origin && recentFlightplan.destination) {
       storeInAsycncStorage("recentFlightplan", JSON.stringify(recentFlightplan));
       setCurrentFlight({
         origin: recentFlightplan?.origin.icao_code ?? "",
@@ -68,6 +68,9 @@ export default function HomeScreen() {
         aircraft: recentFlightplan?.aircraft.icao_code ?? "",
         callsign: recentFlightplan?.atc.callsign ?? "",
       });
+    } else {
+      setCurrentFlight(undefined);
+      fetchNewFlightplan();
     }
   }, [recentFlightplan]);
 
