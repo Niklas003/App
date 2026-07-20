@@ -1,5 +1,6 @@
 import { corporateColor, corporateYellow } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
+import React from "react";
 import { ColorSchemeName, Dimensions, StyleSheet, View } from "react-native";
 
 export function FlightProgress({ scheme }: { scheme: ColorSchemeName }) {

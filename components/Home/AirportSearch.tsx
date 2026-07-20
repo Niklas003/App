@@ -1,7 +1,7 @@
 import { corporateYellow } from "@/constants/Colors";
 import { useElementColor } from "@/hooks/useElementColor";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import React, { useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import { ThemedCardView } from "../ThemedCardView";
 import { ThemedText } from "../ThemedText";
