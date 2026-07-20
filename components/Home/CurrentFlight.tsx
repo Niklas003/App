@@ -1,8 +1,9 @@
 import { Colors, corporateColor, corporateLightWhite } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme.web";
 import BasicFlight from "@/types/BasicFlight";
-import { Button } from "@react-navigation/elements";
 import * as Haptics from 'expo-haptics';
+import { Button } from "expo-router/react-navigation";
+import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ThemedCardView } from "../ThemedCardView";
 import { ThemedText } from "../ThemedText";

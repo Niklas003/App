@@ -13,7 +13,7 @@ import { getUTCTimeString } from "@/helper/getUTCTimeString";
 import BasicFlight from "@/types/BasicFlight";
 import { SimBriefFlightPlan } from "@/types/FlightPlan";
 import { BlurView } from "expo-blur";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Platform, StyleSheet } from "react-native";
 
 

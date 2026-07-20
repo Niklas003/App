@@ -9,6 +9,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { corporateYellow } from '@/constants/Colors';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React from 'react';
 
 export default function TabTwoScreen() {
   return (
