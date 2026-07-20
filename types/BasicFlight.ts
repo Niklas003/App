@@ -1,3 +1,5 @@
+import { FlightPlanParams } from "./FlightPlan";
+
 export default interface BasicFlight {
     origin: string,
     destination: string,
@@ -5,4 +7,5 @@ export default interface BasicFlight {
     arrivalUTC: string,
     aircraft: string,
     callsign: string,
+    flightPlanParams: FlightPlanParams 
 }

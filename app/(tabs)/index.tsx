@@ -67,6 +67,7 @@ export default function HomeScreen() {
         arrivalUTC: getUTCTimeString(recentFlightplan?.times.est_in),
         aircraft: recentFlightplan?.aircraft.icao_code ?? "",
         callsign: recentFlightplan?.atc.callsign ?? "",
+        flightPlanParams: recentFlightplan?.params
       });
     } else {
       setCurrentFlight(undefined);

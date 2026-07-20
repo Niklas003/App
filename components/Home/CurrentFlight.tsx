@@ -1,4 +1,5 @@
 import { Colors, corporateColor, corporateLightWhite } from "@/constants/Colors";
+import { getCurrentUnixTime, getHoursBetweenUnixTimes } from "@/helper/timeHelper";
 import { useColorScheme } from "@/hooks/useColorScheme.web";
 import BasicFlight from "@/types/BasicFlight";
 import * as Haptics from 'expo-haptics';
@@ -26,7 +27,12 @@ export function CurrentFlight({flight, error, refreshFlightPlan}:{flight: BasicF
             <ThemedText type="defaultBold">{flight.destination}</ThemedText>
             <ThemedText>{flight.arrivalUTC}</ThemedText>
           </View>
-        </TouchableOpacity><Button onPressIn={() => refreshFlightPlan()} style={currentScheme === "dark" ? styles.refreshButton : styles.refreshButtonLight} color={currentScheme === "dark" ? corporateColor : corporateLightWhite}>Refresh</Button></>  
+        </TouchableOpacity>
+        {getHoursBetweenUnixTimes(getCurrentUnixTime(), Number(flight.flightPlanParams.time_generated)) > 24 &&
+          <View style={styles.viewCenter}>
+            <ThemedText type="defaultBold">This Flight Plan might be outdated!</ThemedText>
+          </View>}
+        <Button onPressIn={() => refreshFlightPlan()} style={currentScheme === "dark" ? styles.refreshButton : styles.refreshButtonLight} color={currentScheme === "dark" ? corporateColor : corporateLightWhite}>Refresh</Button></>  
     ):(
         error ? <ThemedText>{error}</ThemedText> :
         <ThemedText>Loading</ThemedText>
@@ -56,5 +62,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 5,
     backgroundColor: Colors.dark.background,
+  },
+  viewCenter:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });
