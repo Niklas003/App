@@ -143,9 +143,21 @@ export interface FlightPlanWeights {
     est_ramp: string
 }
 
+export interface FlightPlanParams {
+  airac: string;
+  ofp_layout: string;
+  request_id: string;
+  sequence_id: string;
+  static_id: Record<string, unknown>;
+  time_generated: string;
+  units: "kgs" | "lbs";
+  user_id: string;
+  xml_file: string;
+}
+
 export interface SimBriefFlightPlan {
   fetch: any;
-  params: any;
+  params: FlightPlanParams;
   general: any;
   origin: FlightPlanAirport;
   destination: FlightPlanAirport;
